@@ -1,0 +1,17 @@
+{
+  "name": "estela-currao",
+  "main": "dist/server/index.mjs",
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "dist/client"
+  },
+  "compatibility_date": "2026-09-18",
+  "compatibility_flags": [],
+  "no_bundle": true,
+  "rules": [
+    {
+      "type": "ESModule",
+      "globs": ["**/*.mjs", "**/*.js"]
+    }
+  ]
+}

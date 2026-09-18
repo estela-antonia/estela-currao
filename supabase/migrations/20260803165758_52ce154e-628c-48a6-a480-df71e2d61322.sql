@@ -1,0 +1,1 @@
+UPDATE public.subcategories SET is_active = false WHERE slug = 'currao';

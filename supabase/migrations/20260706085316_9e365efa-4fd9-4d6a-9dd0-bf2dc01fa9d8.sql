@@ -1,0 +1,1 @@
+ALTER TABLE public.site_settings ADD COLUMN IF NOT EXISTS press_dossier_media_id uuid REFERENCES public.media(id) ON DELETE SET NULL;

@@ -1,0 +1,1 @@
+ALTER TABLE public.site_settings ADD COLUMN IF NOT EXISTS footer_legal_links jsonb NOT NULL DEFAULT '[]'::jsonb;

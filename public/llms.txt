@@ -1,0 +1,27 @@
+# Estela Currao — Artista Visual y Arquitecta
+
+> Sitio oficial de Estela Currao, artista visual y arquitecta. Obra contemporánea en escultura, pintura y fotografía.
+
+## About
+
+Estela Currao is a visual artist and architect. Her work spans sculpture, painting and photography, organized in four series: Identity, Rhythmic Matrices, Intersections and Photography (Spaces of Perception).
+
+## Primary URL
+
+- Site: https://estela-monumental-home.lovable.app
+
+## Key pages
+
+- [Home](https://estela-monumental-home.lovable.app/): landing page and entry point to the gallery.
+- [Identity](https://estela-monumental-home.lovable.app/identity): Identity series — sculpture and mixed media.
+- [Rhythmic Matrices](https://estela-monumental-home.lovable.app/rhythmic-matrices): Rhythmic Matrices series.
+- [Intersections](https://estela-monumental-home.lovable.app/intersections): Intersections series — painting.
+- [Spaces of Perception](https://estela-monumental-home.lovable.app/photography): Photography — Spaces of Perception.
+- [Media](https://estela-monumental-home.lovable.app/media): Overview of disciplines (sculpture, painting, photography).
+- [News](https://estela-monumental-home.lovable.app/news): Exhibitions and publications.
+- [Contact](https://estela-monumental-home.lovable.app/contact): Contact for exhibitions, commissions and press.
+- [Press dossier](https://estela-monumental-home.lovable.app/press-dossier): Downloadable press dossier.
+
+## Sitemap
+
+- https://estela-monumental-home.lovable.app/sitemap.xml

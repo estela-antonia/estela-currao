@@ -1,0 +1,1 @@
+update public.media set size_bytes=569438, width=1782, height=2200 where storage_path='1783400535956-ee2zsz.jpg';

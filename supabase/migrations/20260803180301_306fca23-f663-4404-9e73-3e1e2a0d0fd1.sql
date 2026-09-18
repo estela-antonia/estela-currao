@@ -1,0 +1,6 @@
+update public.media set storage_path = '/__l5e/assets-v1/bd700223-830f-4c09-b494-7bf357dd955f/Organic_Matrices_cover.jpg' where storage_path like '%/Organic_Matrices_cover.jpg';
+update public.media set storage_path = '/__l5e/assets-v1/85c56ad9-89ba-423c-88f0-4e7109bb1d8e/P_Le_rythmedesautres_F60_MR.jpg' where storage_path like '%/P_Le_rythmedesautres_F60_MR.jpg';
+update public.media set storage_path = '/__l5e/assets-v1/3cd6d442-0f00-45c5-a78d-e54495d07699/S_le_cri_OM.jpg' where storage_path like '%/S_le_cri_OM.jpg';
+update public.media set storage_path = '/__l5e/assets-v1/ff295b62-c3df-4d33-95aa-dfeed954b58e/S_le_cri_OM_02.jpg' where storage_path like '%/S_le_cri_OM_02.jpg';
+update public.media set storage_path = '/__l5e/assets-v1/939ef347-be40-4b54-9c3c-fd0c5014b9ee/S_le_cri_OM_03.jpg' where storage_path like '%/S_le_cri_OM_03.jpg';
+update public.media set storage_path = '/__l5e/assets-v1/9d5d6198-9647-442c-b353-90adcef12441/S_le_cri_OM_04.jpg' where storage_path like '%/S_le_cri_OM_04.jpg';

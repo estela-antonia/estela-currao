@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /__l5e/assets-v1/
+Allow: /assets/
+
+User-agent: Googlebot-Image
+Allow: /
+Allow: /__l5e/assets-v1/
+Allow: /assets/
+
+Sitemap: https://estelacurrao.com/sitemap.xml

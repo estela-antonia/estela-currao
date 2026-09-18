@@ -1,0 +1,3 @@
+UPDATE public.works SET featured_media_id = '75e4251d-1e5b-48a2-8943-b93841857c14', updated_at = now() WHERE title = 'Despierto';
+UPDATE public.works SET featured_media_id = '3e23baa0-de6b-4845-8f93-b45ea43ec5e8', updated_at = now() WHERE title = 'Vent (Wind)';
+DELETE FROM public.work_images wi USING public.works w WHERE wi.work_id = w.id AND w.title = 'Vent (Wind)' AND wi.media_id = '27d7f34e-0b5a-45ce-befa-791bfdefc19a';
