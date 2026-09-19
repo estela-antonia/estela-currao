@@ -4,7 +4,7 @@ import { siteContentQueryOptions } from "@/lib/site-content";
 import { SiteLayout } from "@/components/SiteLayout";
 import { RouteErrorFallback } from "@/components/RouteFallbacks";
 import { BASE_URL } from "@/lib/site";
-import heroAsset from "@/assets/estela_home.webp";
+import heroAsset from "@/assets/estela_home.webp.asset.json";
 
 export const Route = createFileRoute("/works")({
   loader: ({ context }) => context.queryClient.ensureQueryData(siteContentQueryOptions),
@@ -16,8 +16,8 @@ export const Route = createFileRoute("/works")({
       { property: "og:description", content: "Explore the work of Estela Currao by series: sculpture, painting and photography grouped into her main thematic worlds." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE_URL}/works` },
-      { property: "og:image", content: `${BASE_URL}${heroAsset}` },
-      { name: "twitter:image", content: `${BASE_URL}${heroAsset}` },
+      { property: "og:image", content: `${BASE_URL}${heroAsset.url}` },
+      { name: "twitter:image", content: `${BASE_URL}${heroAsset.url}` },
     ],
     links: [{ rel: "canonical", href: `${BASE_URL}/works` }],
     scripts: [

@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 import type { Theme } from "@/lib/site-content.types";
 import { getSiteContent } from "@/lib/site-content.functions";
 import { BASE_URL } from "@/lib/site";
-import homeAsset from "@/assets/estela_home.webp";
+import homeAsset from "@/assets/estela_home.webp.asset.json";
 
 type SitemapImage = { loc: string; title?: string; caption?: string };
 
@@ -52,7 +52,7 @@ function collectImages(
   return out;
 }
 
-const HOME_IMAGE = `${BASE_URL}${homeAsset}`;
+const HOME_IMAGE = `${BASE_URL}${homeAsset.url}`;
 
 const STATIC: SitemapEntry[] = [
   {

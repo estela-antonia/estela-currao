@@ -5,7 +5,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import type { ThemeSlug, WorkPiece, Theme } from "@/lib/site-content.types";
 import { siteContentQueryOptions, mediaSeoQueryOptions, type MediaSeo } from "@/lib/site-content";
 import { BASE_URL } from "@/lib/site";
-import homeAsset from "@/assets/estela_home.webp";
+import homeAsset from "@/assets/estela_home.webp.asset.json";
 import { RouteErrorFallback, RouteNotFoundFallback } from "@/components/RouteFallbacks";
 
 type MediaType = "sculpture" | "painting" | "photography";
@@ -139,9 +139,9 @@ export const Route = createFileRoute("/media/$type")({
         { property: "og:description", content: description },
         { property: "og:url", content: url },
         { property: "og:type", content: "website" },
-        { property: "og:image", content: `${BASE_URL}${homeAsset}` },
+        { property: "og:image", content: `${BASE_URL}${homeAsset.url}` },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:image", content: `${BASE_URL}${homeAsset}` },
+        { name: "twitter:image", content: `${BASE_URL}${homeAsset.url}` },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
@@ -155,7 +155,7 @@ export const Route = createFileRoute("/media/$type")({
             url,
             inLanguage: ["fr", "es"],
             about: keyword,
-            primaryImageOfPage: `${BASE_URL}${homeAsset}`,
+            primaryImageOfPage: `${BASE_URL}${homeAsset.url}`,
             creator: {
               "@id": `${BASE_URL}/#person`,
               "@type": "Person",

@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { supabase } from "@/integrations/supabase/client";
-import { getSignedUrl } from "@/lib/admin/media";
+import { getPressDossierUrl } from "@/lib/site-chrome.functions";
 import { BASE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/press-dossier")({
@@ -56,28 +55,9 @@ function PressDossierPage() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const { data: settings } = await supabase
-        .from("site_settings")
-        .select("press_dossier_media_id")
-        .eq("singleton", true)
-        .maybeSingle();
-      const mediaId = (settings as { press_dossier_media_id: string | null } | null)?.press_dossier_media_id;
-      if (!mediaId) {
-        if (!cancelled) setLoading(false);
-        return;
-      }
-      const { data: media } = await supabase
-        .from("media")
-        .select("storage_bucket, storage_path")
-        .eq("id", mediaId)
-        .maybeSingle();
-      if (!media) {
-        if (!cancelled) setLoading(false);
-        return;
-      }
       try {
-        const signed = await getSignedUrl(media.storage_bucket, media.storage_path, 3600);
-        if (!cancelled) {
+        const { url: signed } = await getPressDossierUrl();
+        if (!cancelled && signed) {
           setUrl(signed);
           window.location.replace(signed);
         }

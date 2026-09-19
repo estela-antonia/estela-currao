@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { RouteErrorFallback } from "@/components/RouteFallbacks";
 import { BASE_URL } from "@/lib/site";
-import heroAsset from "@/assets/estela_home.webp";
+import heroAsset from "@/assets/estela_home.webp.asset.json";
 
 const TITLE = "Architecture — Estela Currao | Architect and Visual Artist";
 const DESCRIPTION =
@@ -22,9 +22,9 @@ export const Route = createFileRoute("/architecture")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE_URL}/architecture` },
-      { property: "og:image", content: `${BASE_URL}${heroAsset}` },
+      { property: "og:image", content: `${BASE_URL}${heroAsset.url}` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: `${BASE_URL}${heroAsset}` },
+      { name: "twitter:image", content: `${BASE_URL}${heroAsset.url}` },
     ],
     links: [{ rel: "canonical", href: `${BASE_URL}/architecture` }],
     scripts: [
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/architecture")({
           inLanguage: "en",
           about: { "@id": `${BASE_URL}/#person` },
           isPartOf: { "@id": `${BASE_URL}/#website` },
-          primaryImageOfPage: `${BASE_URL}${heroAsset}`,
+          primaryImageOfPage: `${BASE_URL}${heroAsset.url}`,
           mainEntity: {
             "@id": `${BASE_URL}/#person`,
             "@type": "Person",

@@ -1,9 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import homeAsset from "@/assets/estela_home.webp";
-import homeMobileAsset from "@/assets/estela_home_mobile.webp";
-import { supabase } from "@/integrations/supabase/client";
-import { getSignedUrl } from "@/lib/admin/media";
+import homeAsset from "@/assets/estela_home.webp.asset.json";
+import homeMobileAsset from "@/assets/estela_home_mobile.webp.asset.json";
+import { getHomeImages } from "@/lib/site-chrome.functions";
 import { BASE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/")({
@@ -16,22 +15,22 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Work of Estela Currao — visual artist and architect. Contemporary sculpture, painting and photography." },
       { property: "og:url", content: "https://estelacurrao.com/" },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: `${BASE_URL}${homeAsset}` },
+      { property: "og:image", content: `${BASE_URL}${homeAsset.url}` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: `${BASE_URL}${homeAsset}` },
+      { name: "twitter:image", content: `${BASE_URL}${homeAsset.url}` },
     ],
     links: [
       {
         rel: "preload",
         as: "image",
-        href: homeAsset,
+        href: homeAsset.url,
         media: "(min-width: 768px)",
         fetchPriority: "high" as const,
       },
       {
         rel: "preload",
         as: "image",
-        href: homeMobileAsset,
+        href: homeMobileAsset.url,
         media: "(max-width: 767px)",
         fetchPriority: "high" as const,
       },
@@ -54,7 +53,7 @@ export const Route = createFileRoute("/")({
           mainEntity: { "@id": `${BASE_URL}/#person` },
           primaryImageOfPage: {
             "@type": "ImageObject",
-            url: `${BASE_URL}${homeAsset}`,
+            url: `${BASE_URL}${homeAsset.url}`,
           },
         }),
       },
@@ -96,9 +95,9 @@ function Index() {
   const [leaving, setLeaving] = useState(false);
   const [desktopBox, setDesktopBox] = useState<Box | null>(null);
   const [mobileBox, setMobileBox] = useState<Box | null>(null);
-  const [desktopSrc, setDesktopSrc] = useState<string>(homeAsset);
-  const [tabletSrc, setTabletSrc] = useState<string>(homeAsset);
-  const [mobileSrc, setMobileSrc] = useState<string>(homeMobileAsset);
+  const [desktopSrc, setDesktopSrc] = useState<string>(homeAsset.url);
+  const [tabletSrc, setTabletSrc] = useState<string>(homeAsset.url);
+  const [mobileSrc, setMobileSrc] = useState<string>(homeMobileAsset.url);
   const heroRef = useRef<HTMLImageElement>(null);
   const updateRef = useRef<() => void>(() => {});
 
@@ -127,44 +126,16 @@ function Index() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const { data: settings } = await supabase
-        .from("site_settings")
-        .select("home_image_desktop_media_id, home_image_tablet_media_id, home_image_mobile_media_id")
-        .eq("singleton", true)
-        .maybeSingle();
-      if (!settings || cancelled) return;
-      const ids = [
-        settings.home_image_desktop_media_id,
-        settings.home_image_tablet_media_id,
-        settings.home_image_mobile_media_id,
-      ].filter((v): v is string => Boolean(v));
-      if (ids.length === 0) return;
-      const { data: rows } = await supabase
-        .from("media")
-        .select("id, storage_bucket, storage_path")
-        .in("id", ids);
-      if (!rows || cancelled) return;
-      const byId = new Map(rows.map((r) => [r.id, r]));
-      const resolve = async (id: string | null) => {
-        if (!id) return null;
-        const m = byId.get(id);
-        if (!m) return null;
-        try {
-          return await getSignedUrl(m.storage_bucket, m.storage_path, 3600);
-        } catch {
-          return null;
-        }
-      };
-      const [d, t, m] = await Promise.all([
-        resolve(settings.home_image_desktop_media_id),
-        resolve(settings.home_image_tablet_media_id),
-        resolve(settings.home_image_mobile_media_id),
-      ]);
-      if (cancelled) return;
-      if (d) setDesktopSrc(d);
-      if (t) setTabletSrc(t);
-      else if (d) setTabletSrc(d);
-      if (m) setMobileSrc(m);
+      try {
+        const { desktop: d, tablet: t, mobile: m } = await getHomeImages();
+        if (cancelled) return;
+        if (d) setDesktopSrc(d);
+        if (t) setTabletSrc(t);
+        else if (d) setTabletSrc(d);
+        if (m) setMobileSrc(m);
+      } catch {
+        // keep the bundled hero images
+      }
     })();
     return () => {
       cancelled = true;

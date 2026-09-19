@@ -5,7 +5,7 @@ import { LazyImage } from "@/components/LazyImage";
 import { cn } from "@/lib/utils";
 import { newsContentQueryOptions } from "@/lib/site-content";
 import { BASE_URL } from "@/lib/site";
-import heroAsset from "@/assets/estela_home.webp";
+import heroAsset from "@/assets/estela_home.webp.asset.json";
 import { useState } from "react";
 import { RouteErrorFallback } from "@/components/RouteFallbacks";
 
@@ -19,8 +19,8 @@ export const Route = createFileRoute("/news")({
       { property: "og:description", content: "Recent exhibitions and publications by visual artist Estela Currao." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE_URL}/news` },
-      { property: "og:image", content: `${BASE_URL}${heroAsset}` },
-      { name: "twitter:image", content: `${BASE_URL}${heroAsset}` },
+      { property: "og:image", content: `${BASE_URL}${heroAsset.url}` },
+      { name: "twitter:image", content: `${BASE_URL}${heroAsset.url}` },
     ],
     links: [{ rel: "canonical", href: `${BASE_URL}/news` }],
     scripts: [
