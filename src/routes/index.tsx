@@ -1,7 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import homeAsset from "@/assets/estela_home.webp.asset.json";
-import homeMobileAsset from "@/assets/estela_home_mobile.webp.asset.json";
+// Imágenes de portada servidas desde public/ (funcionan en cualquier hosting).
+const HOME_DESKTOP_URL = "/estela_home.webp";
+const HOME_MOBILE_URL = "/estela_home_mobile.webp";
+const homeAsset = { url: HOME_DESKTOP_URL };
+const homeMobileAsset = { url: HOME_MOBILE_URL };
 import { getHomeImages } from "@/lib/site-chrome.functions";
 import { BASE_URL } from "@/lib/site";
 

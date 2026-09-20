@@ -5,7 +5,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import type { ThemeSlug, WorkPiece, Theme } from "@/lib/site-content.types";
 import { siteContentQueryOptions, mediaSeoQueryOptions, type MediaSeo } from "@/lib/site-content";
 import { BASE_URL } from "@/lib/site";
-import homeAsset from "@/assets/estela_home.webp.asset.json";
+const homeAsset = { url: "/estela_home.webp" };
 import { RouteErrorFallback, RouteNotFoundFallback } from "@/components/RouteFallbacks";
 
 type MediaType = "sculpture" | "painting" | "photography";

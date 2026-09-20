@@ -4,7 +4,7 @@ import { siteContentQueryOptions } from "@/lib/site-content";
 import { SiteLayout } from "@/components/SiteLayout";
 import { RouteErrorFallback } from "@/components/RouteFallbacks";
 import { BASE_URL } from "@/lib/site";
-import heroAsset from "@/assets/estela_home.webp.asset.json";
+const heroAsset = { url: "/estela_home.webp" };
 
 export const Route = createFileRoute("/works")({
   loader: ({ context }) => context.queryClient.ensureQueryData(siteContentQueryOptions),
