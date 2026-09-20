@@ -17,7 +17,9 @@ tsconfig.tsbuildinfo
 .nitro
 *.local
 .env
+!.env.production
 .env.*
+!.env.production
 !.env.example
 
 # Wrangler / Cloudflare

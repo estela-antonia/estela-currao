@@ -1,12 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
+import { PUBLIC_SUPABASE_PUBLISHABLE_KEY, PUBLIC_SUPABASE_URL } from "@/lib/supabase-public-config";
 
 type LegalLink = { title: string; url: string };
 
 async function createPublicClient() {
   const { createClient } = await import("@supabase/supabase-js");
   return createClient(
-    process.env["SUPABASE_URL"]!,
-    process.env["SUPABASE_PUBLISHABLE_KEY"]!,
+    process.env["SUPABASE_URL"] || PUBLIC_SUPABASE_URL,
+    process.env["SUPABASE_PUBLISHABLE_KEY"] || PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
   );
 }
