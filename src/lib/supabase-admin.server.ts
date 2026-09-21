@@ -8,6 +8,10 @@ function createAdminClient() {
     throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY");
   }
 
+  // Legacy service-role keys are JWTs and must remain in Authorization.
+  // New sb_secret_* keys are opaque and must only be sent as the apikey.
+  const isOpaqueSecretKey = serviceRoleKey.startsWith("sb_secret_");
+
   return createClient<Database>(process.env["SUPABASE_URL"] ?? PUBLIC_SUPABASE_URL, serviceRoleKey, {
     global: {
       fetch: (input, init) => {
@@ -17,7 +21,10 @@ function createAdminClient() {
         if (init?.headers) {
           new Headers(init.headers).forEach((value, key) => headers.set(key, value));
         }
-        if (headers.get("Authorization") === `Bearer ${serviceRoleKey}`) {
+        if (
+          isOpaqueSecretKey &&
+          headers.get("Authorization") === `Bearer ${serviceRoleKey}`
+        ) {
           headers.delete("Authorization");
         }
         headers.set("apikey", serviceRoleKey);
