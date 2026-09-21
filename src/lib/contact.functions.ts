@@ -119,7 +119,8 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       throw new Error(limit.scope === "hour" ? "RATE_LIMIT_HOUR" : "RATE_LIMIT_DAY");
     }
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getSupabaseAdmin } = await import("@/lib/supabase-admin.server");
+    const supabaseAdmin = getSupabaseAdmin();
     const { data: inserted, error } = await supabaseAdmin
       .from("contact_messages")
       .insert({

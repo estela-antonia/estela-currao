@@ -31,7 +31,8 @@ export async function enqueueTemplateEmail(opts: {
   const recipient = entry.to || opts.recipientEmail
   if (!recipient) return { ok: false, reason: 'no_recipient' }
 
-  const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+  const { getSupabaseAdmin } = await import('@/lib/supabase-admin.server')
+  const supabaseAdmin = getSupabaseAdmin()
   const messageId = crypto.randomUUID()
   const templateData = opts.templateData ?? {}
 
