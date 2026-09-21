@@ -22,8 +22,9 @@ export async function enqueueTemplateEmail(opts: {
   templateData?: Record<string, unknown>
 }): Promise<{ ok: boolean; reason?: string }> {
   const SITE_NAME = 'Estela Currao'
-  // Sending subdomain verified in Resend (keeps the main mailbox untouched).
-  const FROM_DOMAIN = process.env['EMAIL_FROM_DOMAIN'] ?? 'send.estelacurrao.com'
+  // Domain verified in Resend. Falls back to the root domain, which is the one
+  // actually verified, so sending keeps working even without the env variable.
+  const FROM_DOMAIN = process.env['EMAIL_FROM_DOMAIN'] ?? 'estelacurrao.com'
 
   const entry = TEMPLATES[opts.templateName]
   if (!entry) return { ok: false, reason: 'template_not_found' }
