@@ -1,9 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import homeAsset from "@/assets/estela_home.webp.asset.json";
-import homeMobileAsset from "@/assets/estela_home_mobile.webp.asset.json";
-import { supabase } from "@/integrations/supabase/client";
-import { getSignedUrl } from "@/lib/admin/media";
+// Imágenes de portada servidas desde public/ (funcionan en cualquier hosting).
+const HOME_DESKTOP_URL = "/estela_home.webp";
+const HOME_MOBILE_URL = "/estela_home_mobile.webp";
+const homeAsset = { url: HOME_DESKTOP_URL };
+const homeMobileAsset = { url: HOME_MOBILE_URL };
+import { getHomeImages } from "@/lib/site-chrome.functions";
 import { BASE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/")({
@@ -127,44 +129,16 @@ function Index() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const { data: settings } = await supabase
-        .from("site_settings")
-        .select("home_image_desktop_media_id, home_image_tablet_media_id, home_image_mobile_media_id")
-        .eq("singleton", true)
-        .maybeSingle();
-      if (!settings || cancelled) return;
-      const ids = [
-        settings.home_image_desktop_media_id,
-        settings.home_image_tablet_media_id,
-        settings.home_image_mobile_media_id,
-      ].filter((v): v is string => Boolean(v));
-      if (ids.length === 0) return;
-      const { data: rows } = await supabase
-        .from("media")
-        .select("id, storage_bucket, storage_path")
-        .in("id", ids);
-      if (!rows || cancelled) return;
-      const byId = new Map(rows.map((r) => [r.id, r]));
-      const resolve = async (id: string | null) => {
-        if (!id) return null;
-        const m = byId.get(id);
-        if (!m) return null;
-        try {
-          return await getSignedUrl(m.storage_bucket, m.storage_path, 3600);
-        } catch {
-          return null;
-        }
-      };
-      const [d, t, m] = await Promise.all([
-        resolve(settings.home_image_desktop_media_id),
-        resolve(settings.home_image_tablet_media_id),
-        resolve(settings.home_image_mobile_media_id),
-      ]);
-      if (cancelled) return;
-      if (d) setDesktopSrc(d);
-      if (t) setTabletSrc(t);
-      else if (d) setTabletSrc(d);
-      if (m) setMobileSrc(m);
+      try {
+        const { desktop: d, tablet: t, mobile: m } = await getHomeImages();
+        if (cancelled) return;
+        if (d) setDesktopSrc(d);
+        if (t) setTabletSrc(t);
+        else if (d) setTabletSrc(d);
+        if (m) setMobileSrc(m);
+      } catch {
+        // keep the bundled hero images
+      }
     })();
     return () => {
       cancelled = true;

@@ -20,10 +20,13 @@ export async function enqueueTemplateEmail(opts: {
   recipientEmail?: string
   idempotencyKey?: string
   templateData?: Record<string, unknown>
+  /** Extra addresses that receive a blind copy of this email. */
+  bccEmails?: string[]
 }): Promise<{ ok: boolean; reason?: string }> {
   const SITE_NAME = 'Estela Currao'
-  const SENDER_DOMAIN = 'notify.estelacurrao.com'
-  const FROM_DOMAIN = 'notify.estelacurrao.com'
+  // Domain verified in Resend. Falls back to the root domain, which is the one
+  // actually verified, so sending keeps working even without the env variable.
+  const FROM_DOMAIN = process.env['EMAIL_FROM_DOMAIN'] ?? 'estelacurrao.com'
 
   const entry = TEMPLATES[opts.templateName]
   if (!entry) return { ok: false, reason: 'template_not_found' }
@@ -31,7 +34,8 @@ export async function enqueueTemplateEmail(opts: {
   const recipient = entry.to || opts.recipientEmail
   if (!recipient) return { ok: false, reason: 'no_recipient' }
 
-  const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+  const { getSupabaseAdmin } = await import('@/lib/supabase-admin.server')
+  const supabaseAdmin = getSupabaseAdmin()
   const messageId = crypto.randomUUID()
   const templateData = opts.templateData ?? {}
 
@@ -94,35 +98,76 @@ export async function enqueueTemplateEmail(opts: {
     status: 'pending',
   })
 
-  const { error } = await supabaseAdmin.rpc('enqueue_email', {
-    queue_name: 'transactional_emails',
-    payload: {
-      message_id: messageId,
-      to: recipient,
-      from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
-      sender_domain: SENDER_DOMAIN,
-      subject,
-      html,
-      text,
-      purpose: 'transactional',
-      label: opts.templateName,
-      idempotency_key: opts.idempotencyKey ?? messageId,
-      unsubscribe_token: unsubscribeToken,
-      queued_at: new Date().toISOString(),
-    },
-  })
-
-  if (error) {
-    console.error('Failed to enqueue email', { error, template: opts.templateName })
+  const apiKey = process.env['RESEND_API_KEY']
+  if (!apiKey) {
     await supabaseAdmin.from('email_send_log').insert({
       message_id: messageId,
       template_name: opts.templateName,
       recipient_email: recipient,
       status: 'failed',
-      error_message: 'Failed to enqueue email',
+      error_message: 'RESEND_API_KEY is not configured',
     })
-    return { ok: false, reason: 'enqueue_failed' }
+    return { ok: false, reason: 'missing_api_key' }
   }
 
-  return { ok: true }
+  const unsubscribeUrl = `https://estelacurrao.com/email/unsubscribe?token=${unsubscribeToken}`
+
+  // Blind copies: drop empties and the main recipient to avoid duplicates.
+  const bcc = (opts.bccEmails ?? [])
+    .map((address) => address.trim())
+    .filter((address) => address.length > 0 && address.toLowerCase() !== normalizedEmail)
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+        'Idempotency-Key': opts.idempotencyKey ?? messageId,
+      },
+      body: JSON.stringify({
+        from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+        to: [recipient],
+        ...(bcc.length > 0 ? { bcc } : {}),
+        subject,
+        html,
+        text,
+        headers: {
+          'List-Unsubscribe': `<${unsubscribeUrl}>`,
+          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        },
+      }),
+    })
+
+    if (!response.ok) {
+      const errorBody = await response.text()
+      console.error(`Resend request failed [${response.status}]: ${errorBody}`)
+      await supabaseAdmin.from('email_send_log').insert({
+        message_id: messageId,
+        template_name: opts.templateName,
+        recipient_email: recipient,
+        status: 'failed',
+        error_message: `Resend ${response.status}: ${errorBody}`.slice(0, 500),
+      })
+      return { ok: false, reason: 'send_failed' }
+    }
+
+    await supabaseAdmin.from('email_send_log').insert({
+      message_id: messageId,
+      template_name: opts.templateName,
+      recipient_email: recipient,
+      status: 'sent',
+    })
+    return { ok: true }
+  } catch (sendError) {
+    console.error('Resend send threw', sendError)
+    await supabaseAdmin.from('email_send_log').insert({
+      message_id: messageId,
+      template_name: opts.templateName,
+      recipient_email: recipient,
+      status: 'failed',
+      error_message: sendError instanceof Error ? sendError.message : 'unknown',
+    })
+    return { ok: false, reason: 'send_failed' }
+  }
 }

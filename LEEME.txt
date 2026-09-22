@@ -1,0 +1,21 @@
+REPARAR LA WEB (paso a paso)
+============================
+
+Este paquete tiene TODOS los archivos de la web en su version correcta y
+completa (incluye la copia a Yahoo del cambio anterior).
+
+QUE HACER
+---------
+1. Abri este ZIP y entra en la carpeta "estela-reparar".
+2. Selecciona TODO lo que hay adentro (src, public, supabase, vite.config.ts,
+   package.json, tsconfig.json, components.json, wrangler.json, .env.example).
+   NO copies la carpeta "estela-reparar" entera, sino su contenido.
+3. En GitHub Desktop pulsa "Show in Explorer".
+4. Pega ahi y acepta "Reemplazar los archivos" / "Si a todo".
+   IMPORTANTE: no borres nada de la carpeta antes de pegar.
+5. En GitHub Desktop, en Summary escribi:  Reparar web
+6. Pulsa "Commit to main" y despues "Push origin".
+7. Espera 3-5 minutos y abri https://estelacurrao.com/works
+
+No hay que tocar Cloudflare, ni Resend, ni la base de datos.
+Las claves secretas siguen guardadas en Cloudflare, no se tocan.

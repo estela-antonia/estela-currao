@@ -119,7 +119,8 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       throw new Error(limit.scope === "hour" ? "RATE_LIMIT_HOUR" : "RATE_LIMIT_DAY");
     }
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getSupabaseAdmin } = await import("@/lib/supabase-admin.server");
+    const supabaseAdmin = getSupabaseAdmin();
     const { data: inserted, error } = await supabaseAdmin
       .from("contact_messages")
       .insert({
@@ -137,9 +138,16 @@ export const submitContactMessage = createServerFn({ method: "POST" })
     const messageRowId = inserted?.id ?? crypto.randomUUID();
     try {
       const { enqueueTemplateEmail } = await import("@/lib/email/send-internal.server");
+      // Extra inboxes that receive a copy of every message from the website.
+      // Configurable without a redeploy through CONTACT_FORWARD_EMAILS.
+      const forwardTo = (process.env["CONTACT_FORWARD_EMAILS"] ?? "ecurrao@yahoo.com")
+        .split(",")
+        .map((address) => address.trim())
+        .filter((address) => address.length > 0);
       const notify = await enqueueTemplateEmail({
         templateName: "contact-notification",
         idempotencyKey: `contact-notification-${messageRowId}`,
+        bccEmails: forwardTo,
         templateData: {
           name: data.name,
           email: data.email,

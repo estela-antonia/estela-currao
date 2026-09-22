@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { RouteErrorFallback } from "@/components/RouteFallbacks";
 import { BASE_URL } from "@/lib/site";
-import heroAsset from "@/assets/estela_home.webp.asset.json";
+const heroAsset = { url: "/estela_home.webp" };
 
 const TITLE = "Architecture — Estela Currao | Architect and Visual Artist";
 const DESCRIPTION =
