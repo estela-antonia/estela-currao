@@ -21,30 +21,11 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
-  // Explicit Nitro config so the build targets Cloudflare Workers identically whether
-  // it runs inside the Lovable sandbox or in an external CI (Cloudflare Workers Builds).
-  // Output goes to dist/ (server worker + client assets); a root wrangler.json deploys it.
-  nitro: {
-    preset: "cloudflare-module",
-    output: { dir: "dist", serverDir: "dist/server", publicDir: "dist/client" },
-    cloudflare: { nodeCompat: true },
-  },
   vite: {
-    define: {
-      "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
-        "https://gdjjwywlpvxudhiwpsnb.supabase.co",
-      ),
-      "import.meta.env.VITE_SUPABASE_PROJECT_ID": JSON.stringify(
-        "gdjjwywlpvxudhiwpsnb",
-      ),
-      "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(
-        "sb_publishable_lUkiiC6ZXcwIJDTHa7q2Rg_x0pec6_U",
-      ),
-    },
     resolve: {
       alias: {
         "entities/lib/decode.js": path.resolve(__dirname, "node_modules/entities/lib/decode.js"),
-        "entities/lib/encode.js": path.resolve(__dirname, "node_modules/entities/encode.js"),
+        "entities/lib/encode.js": path.resolve(__dirname, "node_modules/entities/lib/encode.js"),
         entities: path.resolve(__dirname, "node_modules/entities"),
       },
     },

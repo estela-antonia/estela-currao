@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 import type { Theme } from "@/lib/site-content.types";
 import { getSiteContent } from "@/lib/site-content.functions";
 import { BASE_URL } from "@/lib/site";
-const homeAsset = { url: "/estela_home.webp" };
+import homeAsset from "@/assets/estela_home.webp.asset.json";
 
 type SitemapImage = { loc: string; title?: string; caption?: string };
 

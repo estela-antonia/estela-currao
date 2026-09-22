@@ -8,11 +8,8 @@ const TOKEN_TTL_MS = 1000 * 60 * 60 * 2; // 2 hours
 const encoder = new TextEncoder();
 
 function secret(): string {
-  // External deployments already provide the private database service key.
-  // Reuse it as the HMAC key when a dedicated CSRF secret was not configured,
-  // so issuing the contact token cannot fail before the message is saved.
-  const value = process.env["CONTACT_CSRF_SECRET"] ?? process.env["SUPABASE_SERVICE_ROLE_KEY"];
-  if (!value) throw new Error("Missing contact form signing secret");
+  const value = process.env["CONTACT_CSRF_SECRET"];
+  if (!value) throw new Error("Missing CONTACT_CSRF_SECRET");
   return value;
 }
 

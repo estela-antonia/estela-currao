@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { useRouterState } from "@tanstack/react-router";
-import { getFooterSettings } from "@/lib/site-chrome.functions";
 
 type LegalLink = { title: string; url: string };
 
@@ -16,13 +16,18 @@ export function SiteFooter() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      try {
-        const row = await getFooterSettings();
-        if (cancelled || !row) return;
-        setData({ footer_text: row.footer_text, footer_legal_links: row.footer_legal_links });
-      } catch {
-        // keep the footer hidden when settings are unavailable
-      }
+      const { data: row } = await supabase
+        .from("site_settings")
+        .select("footer_text, footer_legal_links")
+        .eq("singleton", true)
+        .maybeSingle();
+      if (cancelled || !row) return;
+      const links = Array.isArray(row.footer_legal_links)
+        ? (row.footer_legal_links as LegalLink[]).filter(
+            (l) => l && typeof l.title === "string" && typeof l.url === "string" && l.title.trim() && l.url.trim(),
+          )
+        : [];
+      setData({ footer_text: row.footer_text ?? null, footer_legal_links: links });
     })();
     return () => {
       cancelled = true;

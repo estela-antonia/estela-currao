@@ -21,18 +21,6 @@ export const Route = createFileRoute("/_authenticated/admin/works")({
   component: WorksPage,
 });
 
-function SeoTag({ hint }: { hint: string }) {
-  return (
-    <span
-      title={hint}
-      className="ml-1 inline-flex items-center rounded-sm border border-neutral-300 bg-neutral-100 px-1 py-0.5 align-middle text-[10px] font-medium uppercase tracking-wide text-neutral-500"
-    >
-      SEO
-    </span>
-  );
-}
-
-
 type Work = {
   id: string;
   category_id: string;
@@ -279,23 +267,23 @@ function WorksPage() {
                 </div>
 
                 {/* 3. Título */}
-                <div className="space-y-2"><Label>Título <SeoTag hint="Se usa en el título de la página, og:title y datos estructurados." /></Label><Input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} /></div>
+                <div className="space-y-2"><Label>Título</Label><Input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} /></div>
 
                 {/* 4. Año */}
-                <div className="space-y-2"><Label>Año <SeoTag hint="Se usa como dateCreated en los datos estructurados." /></Label><Input value={editing.year ?? ""} onChange={(e) => setEditing({ ...editing, year: e.target.value })} /></div>
+                <div className="space-y-2"><Label>Año</Label><Input value={editing.year ?? ""} onChange={(e) => setEditing({ ...editing, year: e.target.value })} /></div>
 
                 {/* 5. Técnica */}
-                <div className="space-y-2"><Label>Técnica <SeoTag hint="Se usa como artMedium en los datos estructurados." /></Label><Input value={editing.technique ?? ""} onChange={(e) => setEditing({ ...editing, technique: e.target.value })} /></div>
+                <div className="space-y-2"><Label>Técnica</Label><Input value={editing.technique ?? ""} onChange={(e) => setEditing({ ...editing, technique: e.target.value })} /></div>
 
                 {/* 6. Formato / Dimensiones */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2"><Label>Formato <SeoTag hint="Se usa como artworkSurface en los datos estructurados." /></Label><Input placeholder="Formato descriptivo (opcional)" value={editing.format ?? ""} onChange={(e) => setEditing({ ...editing, format: e.target.value })} /></div>
-                  <div className="space-y-2"><Label>Dimensiones <SeoTag hint="Aparece en la ficha técnica y en los datos estructurados." /></Label><Input value={editing.dimensions ?? ""} onChange={(e) => setEditing({ ...editing, dimensions: e.target.value })} /></div>
+                  <div className="space-y-2"><Label>Formato</Label><Input placeholder="Formato descriptivo (opcional)" value={editing.format ?? ""} onChange={(e) => setEditing({ ...editing, format: e.target.value })} /></div>
+                  <div className="space-y-2"><Label>Dimensiones</Label><Input value={editing.dimensions ?? ""} onChange={(e) => setEditing({ ...editing, dimensions: e.target.value })} /></div>
                 </div>
 
                 {/* 7. Media (para página MEDIA) */}
                 <div className="space-y-2">
-                  <Label>Media (para la página MEDIA) <SeoTag hint="Define el artform (sculpture / painting / photography) en los datos estructurados." /></Label>
+                  <Label>Media (para la página MEDIA)</Label>
                   <Select value={editing.media_type ?? "none"} onValueChange={(v) => setEditing({ ...editing, media_type: v === "none" ? null : (v as Work["media_type"]) })}>
                     <SelectTrigger><SelectValue placeholder="Sin clasificar" /></SelectTrigger>
                     <SelectContent>
@@ -308,12 +296,12 @@ function WorksPage() {
                 </div>
 
                 {/* 8. Descripción */}
-                <div className="space-y-2"><Label>Descripción <SeoTag hint="Alternativa a la cita para la meta description de la obra." /></Label>
+                <div className="space-y-2"><Label>Descripción</Label>
                   <Textarea rows={4} value={editing.description ?? ""} onChange={(e) => setEditing({ ...editing, description: e.target.value })} />
                 </div>
 
                 {/* 9. Cita */}
-                <div className="space-y-2"><Label>Cita <SeoTag hint="Fuente principal de la meta description y og:description." /></Label>
+                <div className="space-y-2"><Label>Cita</Label>
                   <Textarea rows={3} placeholder="Cita o frase asociada a la obra" value={editing.cita ?? ""} onChange={(e) => setEditing({ ...editing, cita: e.target.value })} />
                 </div>
 
@@ -323,7 +311,7 @@ function WorksPage() {
                 </div>
 
                 {/* 11. Imagen destacada */}
-                <div className="space-y-2"><Label>Imagen destacada <SeoTag hint="Se usa como og:image, twitter:image y en el sitemap de imágenes." /></Label>
+                <div className="space-y-2"><Label>Imagen destacada</Label>
                   <MediaPicker value={editing.featured_media_id} onChange={(id) => setEditing({ ...editing, featured_media_id: id })} />
                 </div>
 

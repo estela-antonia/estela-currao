@@ -27,8 +27,7 @@ export async function checkAndRecordSubmission(
   ipHash: string,
   sessionHash: string | null,
 ): Promise<RateLimitResult> {
-  const { getSupabaseAdmin } = await import("@/lib/supabase-admin.server");
-  const supabaseAdmin = getSupabaseAdmin();
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
   const now = Date.now();
   const dayAgo = new Date(now - 1000 * 60 * 60 * 24).toISOString();

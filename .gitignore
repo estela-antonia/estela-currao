@@ -13,14 +13,8 @@ dist-ssr
 .output
 .vinxi
 .tanstack/**
-tsconfig.tsbuildinfo
 .nitro
 *.local
-.env
-!.env.production
-.env.*
-!.env.production
-!.env.example
 
 # Wrangler / Cloudflare
 .wrangler/
@@ -36,7 +30,3 @@ tsconfig.tsbuildinfo
 *.njsproj
 *.sln
 *.sw?
-
-# Lovable internal metadata (not needed for external hosting)
-.lovable/
-.workspace/

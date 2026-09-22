@@ -14,8 +14,7 @@ export const getEmailFailureAlerts = createServerFn({ method: "GET" })
     });
     if (!isAdmin) throw new Error("Forbidden");
 
-    const { getSupabaseAdmin } = await import("@/lib/supabase-admin.server");
-    const supabaseAdmin = getSupabaseAdmin();
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin
       .from("email_send_log")
       .select("id, message_id, template_name, recipient_email, status, error_message, created_at")

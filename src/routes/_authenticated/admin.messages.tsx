@@ -61,25 +61,11 @@ function MessagesAdminPage() {
     setMessages((data ?? []) as Message[]);
   }
 
-  async function refresh() {
-    await load();
-    try {
-      const res = await loadAlerts();
-      setAlerts(res.alerts as Alert[]);
-    } catch {
-      setAlerts([]);
-    }
-  }
-
   useEffect(() => {
-    void refresh();
-    const onFocus = () => void load();
-    window.addEventListener("focus", onFocus);
-    const timer = window.setInterval(() => void load(), 60_000);
-    return () => {
-      window.removeEventListener("focus", onFocus);
-      window.clearInterval(timer);
-    };
+    void load();
+    loadAlerts()
+      .then((res) => setAlerts(res.alerts as Alert[]))
+      .catch(() => setAlerts([]));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -119,9 +105,6 @@ function MessagesAdminPage() {
           </Button>
           <Button variant={filter === "unread" ? "default" : "outline"} size="sm" onClick={() => setFilter("unread")}>
             Sin leer ({unread})
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => void refresh()}>
-            Actualizar
           </Button>
         </div>
       }

@@ -5,7 +5,7 @@ import { LazyImage } from "@/components/LazyImage";
 import { cn } from "@/lib/utils";
 import { newsContentQueryOptions } from "@/lib/site-content";
 import { BASE_URL } from "@/lib/site";
-const heroAsset = { url: "/estela_home.webp" };
+import heroAsset from "@/assets/estela_home.webp.asset.json";
 import { useState } from "react";
 import { RouteErrorFallback } from "@/components/RouteFallbacks";
 
